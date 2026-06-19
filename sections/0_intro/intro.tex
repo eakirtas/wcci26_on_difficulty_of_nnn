@@ -1,67 +1,41 @@
 \section{Introduction}
 
+\begin{frame}{Non-negative Neural Networks in Explainability}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-\begin{frame}{Computation Demands}
-\begin{columns}[c]
-  \begin{column}{0.5\textwidth}
-    Over the last 15 years, the required \textbf{training computations have been approximately doubled every 6 months.}
+  \begin{columns}[T]
+    \begin{column}{0.46\textwidth}
+      \includegraphics[width=\linewidth]{./images/partbased.png}
+    \end{column}
 
-    \vspace{20pt}
-
-    This indicates the \textbf{synergistic advances achieved} in both deep learning
-    \textbf{methodologies} and \textbf{hardware}
-    capabilities.\footnotemark
-  \end{column}
-  \begin{column}{0.5\textwidth}
-    \begin{center}
-      \includegraphics[width=\linewidth]{sections/0_intro/imgs/epoch-ml-trends-2.png}
-    \end{center}
-  \end{column}
-\end{columns}
-\footnotetext{\textbf{Source:} Sevilla, Jaime, et al. "Compute trends
-  across three eras of machine learning." 2022 International Joint Conference on
-  Neural Networks (IJCNN). IEEE, 2022. (https://epoch.ai/blog/compute-trends)}
+    \begin{column}{0.46\textwidth}
+      Leveraging advantages due to the their representation properties.
+      \begin{itemize}
+      \item Eliminating the canceling neurons
+      \item Allows hierarchy part-based representation
+      \item Enforce sparsity
+      \item Explainability
+      \item Post-hoc Analysis 
+      \end{itemize}
+    \end{column}
+  \end{columns}
+  \marklessfootnote{\scriptsize Avramelou, L., Kirtas, M., Passalis, N., Pleros, N. and
+    Tefas, A., 2026. Non-Negative Gated Recurrent Neural Networks. IEEE TETCI.\\
+  }\marklessfootnote{\scriptsize Kirtas, M., Tsampazis, K., Avramelou, L., Passalis, N. and Tefas, A., 2023,
+    September. Using part-based representations for explainable deep
+    reinforcement learning. ECML PKDD 2023 }
 \end{frame}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-
-\begin{frame}{Hardware Accelerator}
-\begin{itemize}
-    \item \textbf{Pushing the boundaries of available hardware}
-    \item Reveals the need to \textbf{shift towards specialized hardware}
-\end{itemize} \vspace{15pt}
-
-    \includegraphics[width=0.9\linewidth]{sections/0_intro/imgs/intro_phd.png}
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-
-
-\begin{frame}{Integrated Silicon Photonics}
-  \textbf{Photonic neurons encode signal using light},  which are then manipulated to provide functionality in neurons. \vspace{-5pt}
-  % rather than electric quantities,
-  % Providing a great potential to be used in DL accelerators due to:
-  \begin{center}
-    \begin{figure}
-        \includegraphics[width=\linewidth]{sections/0_intro/imgs/apl_incoherent.png}
-        \caption{Indicative layouts adopt the incoherent
-          concept.\footnote{\textbf{Source:} Tsakyridis, A., Moralis-Pegios, M., Giamougiannis, G., Kirtas, M., Passalis, N., Tefas, A. and Pleros, N., 2024. Photonic neural networks and optics-informed deep learning fundamentals. APL photonics, 9(1).} \vspace{-5pt}}
-    \end{figure}
-  \end{center}
-  A majority of currently available \textbf{photonic architectures rely on incoherent layouts}.
-\end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{Incoherent Photonics \& The Sign Problem}
-
+\begin{frame}{Non-negative Neural Networks in Integrated Photonics}
+% \footnote{\textbf{Source:} Tsakyridis, A., Moralis-Pegios, M., Giamougiannis, G., Kirtas, M., Passalis, N., Tefas, A. and Pleros, N., 2024. Photonic neural networks and optics-informed deep learning fundamentals. APL photonics, 9(1).}.
 \begin{columns}[T]
 
 %% ── LEFT COLUMN ─────────────────────────────────────────────
 \begin{column}{0.46\textwidth}
   \vspace{0.1em}
   In incoherent photonics the  optical signals are converted into
-  \textbf{power signals} during the activation stage.
+  \textbf{power signals} during the activation stage
 
     % ── wave picture ────────────────────────────────────────────
   \begin{center}
@@ -147,20 +121,93 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}{Motivation}
-  This makes the use of negative representations a challenging process,
-  typically enforcing the adoption of higher complexity hardware architectures
-  (e.x. balanced photodetectors).
-
-  \vspace{10pt}
-  % , such as balanced photodetector schemes,
-  % biasing configurations and signal transformation blocks. 
-
-  To overcome this, one can train non-negative neural networks, however
+\begin{frame}{Challenges of Non-negative Neural Networks}
+  Non-negative training involves different dynamics in the optimization process
+  due to the constraints that are enforced upon trainable parameters.
   \begin{itemize}
   \item Current available methods target \textbf{partial non-negative architectures}
   \item Applied on \textbf{small datasets} or \textbf{non-traditionally used ANNs}
   \item \textbf{Facing difficulties in scaling} ability and \textbf{generalization} in DL architectures
   \item Results in \textbf{performance degradation}
   \end{itemize}  
+\end{frame}
+
+\begin{frame}{Typical initialization}
+  Initialization schemes set weights using a distribution that maintains
+  a high activation variance. This prevents neuron saturation and ensures
+  consistent gradient flow during backpropagation, mitigating the phenomenon of
+  vanishing gradients.
+
+      \begin{table}[t]
+    \centering
+        \centering
+        \begin{tabularx}{\linewidth}[t]{XX}
+            \toprule
+            \textbf{Initialization} & \(w \sim\) \\
+            \midrule
+            (I.1) Xavier Norm.  &  \(\mathcal{N} \left(0, \sqrt{\frac{2}{N_{j}+N_{j-1}}}\right) \in \mathbb{R} \)\\
+            (I.2) Xavier Unif. & \(U\left(-\sqrt{\frac{6}{N_{j}+N_{j-1}}}, \sqrt{\frac{6}{N_{j}+N_{j-1}}}\right)\in \mathbb{R} \) \\
+            (I.3) Kaiming Norm. & \(N\left(0, \sqrt{\frac{2}{N_{j}}}\right)\in \mathbb{R}\) \\
+            (I.4) Kaiming Unif. & \(U\left(-\sqrt{\frac{6}{N_{j}}}, \sqrt{\frac{6}{N_{j}}}\right)\in \mathbb{R}\) \\
+            (I.3) Exponential &  \(\frac{\ln{(U(0, 1))}}{\lambda=100}\in \mathbb{R}_{+}\) \\
+            \bottomrule
+        \end{tabularx}
+        \vspace{-10pt}
+      \end{table}
+\end{frame}
+
+\begin{frame}{Limitations of Typical initialization}
+	     \begin{center}
+       \includegraphics[width=0.7\linewidth]{images/adapt_init_3.png}
+     \end{center}
+     Given a typically initialized network, the optimization algorithms can be
+     modified accordingly to ensure that, during training, the network preserves
+     the non-negativity of the parameters. 
+\end{frame}
+
+\begin{frame}{Non-negative Optimization}
+  Optimization algorithms can be modified accordingly to ensure that the network
+  preserves the non-negativity of the parameters during training.
+
+  \begin{table}[t]
+    \centering
+    \begin{tabularx}{\linewidth}[t]{>{\mystrut}XX}
+            \toprule
+            (U.0) \textbf{Update} & \(\theta_t =  \sigma_{nn} \left(\theta_{t-1} - \eta  \frac{\partial L}{\partial\theta_{t-1}} \right)  \) \\
+            \midrule
+            (U.1) Clip & \( \sigma_{clip}(x) = \max\{0,x\}\in \mathbb{R}_{+}\) \\
+            (U.2) Absolute & \(\sigma_{abs}(x) = |x| \in \mathbb{R}_{+}\) \\
+            \hdashline
+            (U.3) Sigmoid & \( \sigma_{sig}(x) = \frac{1}{1 + e^{-x}} \in (0, 1)\) \\
+            (U.4) Squared & \(\sigma_{sqrt}(x) = x^{2} \in \mathbb{R}_{+}\) \\ 
+            (U.5) Softplus & \(\sigma_{sft}(x)=\ln\!\left(1 + e^{x}\right) \in \mathbb{R}_{+}\) \\
+            \bottomrule
+        \end{tabularx}
+    \vspace{-10pt}
+  \end{table}
+
+  However, they either leading to vanishing gradients or they increase the
+  weights, resulting in exploding gradients.
+
+  % This leads non-negative neural networks to have significantly lower performance
+  % compared to regular models. 
+
+\end{frame}
+
+\begin{frame}{Non-negative Optimization problem}
+
+  By directly applying any optimization algorithm that uses non-negative update
+  functions, the negative weights are transformed into non-negative ones, with
+  the update rule determining the acquired distribution.
+
+  \begin{center}
+    \includegraphics[width=0.8\linewidth]{./images/nn_optimization_problem.pdf}
+  \end{center}
+
+  % For instance, when the Clipping update (Equation U.1)
+  % is utilized, the initial normal distribution is transformed into a Rectified
+  % Gaussian Distribution. Similarly, when the Absolute update (Equation U.2) is
+  % applied, the network consists of the Folded Normal Distribution, as shown in
+  % Figure~\ref{fig:distributions}.  
+
 \end{frame}

@@ -1,21 +1,18 @@
-\section{Isomorphic Non-negative Neural Networks}
+\section{Non-negative post-initialization}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 \begin{frame}{Proposed Method}
-    A general \textbf{isomorphic non-negative transformation} framework for a wide range of architectures.
-  \begin{itemize}
-  \item \textbf{Transform} a regular trained ANN to a \textbf{fully non-negative equivalent}
-  \item Ensure \textbf{non-negative parameters during inference}, including the
-    intermediate values
-  \end{itemize}
 
-  % The proposed method 
-  % \begin{itemize}
-  %   \item \textbf{Lowers the optical hardware complexity }by suppressing the requirement
-  %     of representing the sign information
-  %     \item \textbf{Enhance explainability} due to the elimination of
-  %       canceling neurons
-  % \end{itemize}
+  
+  The proposed method can be applied on top of any existing initialization
+  scheme.
+
+  \begin{itemize}
+  \item Unlocks the potential of non-negative neural networks
+  \item Ensures high variance in the activation distribution
+  \item Gradient propagation during the initial stage of training
+  \item Increase the expressivity of the non-negative constrained models
+  \end{itemize}
 \end{frame}
 
 % \begin{frame}{Novelties}
@@ -46,7 +43,10 @@
   \mathbb{R}\) are the weights and biases of the classifier, respectively, and
   \(i\in \{0, 1\}\). }
 
-  \includegraphics[width=\textwidth]{sections/4_nn/imgs/thesis25_motivation_1.pdf}
+\begin{center}
+	  \includegraphics[width=0.6\textwidth]{sections/4_nn/imgs/training_issue.pdf}
+\end{center}
+
 
   %  We can easily conclude that there is a positive slope decision, with the slope
   %  given by \(m=-w_{0}/w_{1}\), which requires a negative weight.
@@ -65,70 +65,116 @@
 
 % \end{frame}
 
-\begin{frame}{Isomorphism in Neural Networks}
-\textbf{Challenging computational tasks} can be easily solved by \textbf{changing the coordinate system}
-\begin{center}
-    \includegraphics[width=0.45\textwidth]{sections/4_nn/imgs/Selection_548.png}
-\end{center}
-\textbf{Considering isomorphism}, it is claimed that \textbf{ an equivalent classifier with non-negative parameters exists}, producing the \textbf{same classification outcome as the original one.}
-\end{frame}
+% \begin{frame}{Isomorphism in Neural Networks}
+% \textbf{Challenging computational tasks} can be easily solved by \textbf{changing the coordinate system}
+% \begin{center}
+%     \includegraphics[width=0.45\textwidth]{sections/4_nn/imgs/Selection_548.png}
+% \end{center}
+% \textbf{Considering isomorphism}, it is claimed that \textbf{ an equivalent classifier with non-negative parameters exists}, producing the \textbf{same classification outcome as the original one.}
+% \end{frame}
 
 \begin{frame}{Transformation}
-The original task and classifier can be transformed, by \textbf{shifting and rotating the points and the decision boundary}, getting an equivalent non-negative classifier\textbf{, using only non-negative parameters.}
 
-\begin{center}
-	\includegraphics[width=0.8\textwidth]{sections/4_nn/imgs/thesis25_motivation_2.pdf}
-\end{center}
+  \begin{columns}[T]
+    \begin{column}{0.46\textwidth}
+      The original task and classifier can be transformed, by \textbf{shifting
+        and rotating the points and the decision boundary}, getting an
+      equivalent non-negative classifier\textbf{, using only non-negative
+        parameters.} The acquired non-negative classifier results in the decision boundary given by
+      \begin{equation}
+        x_1 =-\frac{\left|w_{0}\right|}{w_{1}} x_0' -\frac{b-a\left|w_{0}\right|}{w_{1}} \in \mathbb{R}
+      \end{equation}
+      {\scriptsize where \(w_0 < 0\), \(w_1 > 0\), \(a=1\) and
+        \(x_0'=\left(a-x_0\right)\).}
+      % The non-negative classifier leads to a rotated decision boundary and is equal to
+      % the original classifier performance.
+    \end{column}
+    \begin{column}{0.46\textwidth}
+      \begin{center}
+        \includegraphics[width=\linewidth]{sections/4_nn/imgs/proposed_transformation.pdf}
+      \end{center}
+
+    \end{column}
+  \end{columns}
+
+  
 
 
-Such a non-negative isomorphic classifier results in the decision  boundary
-given by:   
-\begin{equation}
-    x_1 =-\frac{\left|w_{0}\right|}{w_{1}} x_0' -\frac{b-a\left|w_{0}\right|}{w_{1}} \in \mathbb{R}
+
+
+\end{frame}
+
+\begin{frame}{Definition of Fully-connected Layer}
+  Let \(\bm{z}^{(j)} \in \mathbb{R}^{N_{j}}\) be the output of the linear part
+  of the \(j\)-th layer of a neural network architecture, where the linear
+  function is denoted as
+  \(f^{(j)}(\cdot):\mathbb{R}^{N_{j-1}}\rightarrow\mathbb{R}^{N_{j}}\), given by 
+  \begin{equation}
+    \label{eq:linear}
+    \bm{z}^{(j)} = f^{(j)}(\bm{x}^{(j)}) = \bm{W}^{(j)}\bm{x}^{(j)} + \bm{b}^{{(j)}} \in \mathbb{R}^{N_{j}},
+  \end{equation}
+  {\scriptsize where \(\bm{W}^{(j)} \in \mathbb{R}^{N_{j} \times  N_{j-1}}\),
+    \(\bm{b}^{(j)} \in \mathbb{R}^{N_j}\), and \(\bm{x}^{(j)} \in
+    \mathbb{R}^{N_{j-1}}\).}
+
+  Assuming that an activation function \(\phi(\cdot): \mathbb{R}^{N_j} \rightarrow \mathbb{R}^{N_j}_{+}\), where \(\mathbb{R}_{+}\) denotes the set of positive real values, the output of the \(j\)-th layer is given by:
+  \begin{equation}
+    \label{eq:activation}
+    \bm{y}^{(j)} = \phi^{(j)}(\bm{z}^{(j)}) \in \mathbb{R}^{N_j}_{+}.
 \end{equation}
-{\scriptsize where \(w_0 < 0\), \(w_1 > 0\), \(a=1\) and
-  \(x_0'=\left(a-x_0\right)\).}
-% The non-negative classifier leads to a rotated decision boundary and is equal to
-% the original classifier performance.
 \end{frame}
 
+% \begin{frame}{Definition Linear Neuron}
+% Let \(z_i \in \mathbb{R}\) the \textbf{response of the linear part }of the \(i\)-th \textbf{neuron} of a fully connected
+%   layer, where the linear function is denoted by \(u_{i}(\cdot): \mathbb{R}^{M}
+%   \rightarrow \mathbb{R}\) and \(i = 1 \ldots N\), given by:  
 
-\begin{frame}{Definition Linear Neuron}
-Let \(z_i \in \mathbb{R}\) the \textbf{response of the linear part }of the \(i\)-th \textbf{neuron} of a fully connected
-  layer, where the linear function is denoted by \(u_{i}(\cdot): \mathbb{R}^{M}
-  \rightarrow \mathbb{R}\) and \(i = 1 \ldots N\), given by:  
+%   \begin{equation}
+%     \label{eq:linear_pass}
+%     z_i = u_i(\bm{x}) = \sum_{j=1}^{M}{w_{ij}} x_j + b_i  \in \mathbb{R}, 
+%   \end{equation}
+%   {\scriptsize where \(\bm{w}_i \in \mathbb{R}^{M}\), \(b_i \in \mathbb{R}\) and \(\bm{x} \in
+%   \mathbb{R}^{M}\) are the weight, bias, and input vectors of the \(i\)-th
+%   neuron, respectively.}
 
-  \begin{equation}
-    \label{eq:linear_pass}
-    z_i = u_i(\bm{x}) = \sum_{j=1}^{M}{w_{ij}} x_j + b_i  \in \mathbb{R}, 
-  \end{equation}
-  {\scriptsize where \(\bm{w}_i \in \mathbb{R}^{M}\), \(b_i \in \mathbb{R}\) and \(\bm{x} \in
-  \mathbb{R}^{M}\) are the weight, bias, and input vectors of the \(i\)-th
-  neuron, respectively.}
+%     Assuming an\textbf{ activation function }\(g(\cdot): \mathbb{R}
+%   \rightarrow \mathbb{R}_{+} \), where \(\mathbb{R}_{+}\) denotes the set of
+%   non-negative real values, the output of the \(i\)-th neuron is: 
+%   \begin{equation}
+%     y_i = g(z_i) \in \mathbb{R}_{+}.
+%   \end{equation}
 
-    Assuming an\textbf{ activation function }\(g(\cdot): \mathbb{R}
-  \rightarrow \mathbb{R}_{+} \), where \(\mathbb{R}_{+}\) denotes the set of
-  non-negative real values, the output of the \(i\)-th neuron is: 
-  \begin{equation}
-    y_i = g(z_i) \in \mathbb{R}_{+}.
-  \end{equation}
-
-\end{frame}
+% \end{frame}
 
 \begin{frame}{Transformation: Input Rotation}
 
 \noindent
 \begin{minipage}{.7\textwidth}
-      This allows us to \textbf{rotate} the \textbf{input feature space}, as
-\begin{equation*}
-\label{eq:rotated_input}
-    x_j' = f(x_j) = 
-    \begin{cases}
-        \alpha - x_j & \text{if } w_{ij} <  0\\
-        x_j     & \text{otherwise},
-    \end{cases}
-\end{equation*}
-{\scriptsize where \(x_j' \in \mathbb{R}_{+}\).} 
+  Rotate the input multidimensional-space to a non-negative axis,
+  projecting the weights that were originally initialized as negative onto the
+  \begin{equation}
+     \mathbbm{1}_{N_{j-1}}\alpha^{(j)} - \bm{x}^{(j)} \in [0,
+  \alpha]^{{N_{j-1}}}-\text{axis}
+  \end{equation}
+
+  {\scriptsize with \(\mathbbm{1}_{N_{j-1}} \in [1, \ldots, 1]^{N_{j-1}}\) and \(\alpha^{(j)}
+  \geq max(\mathcal{X}^{(j)})\) denotes the rotation constant of the layer  and
+  \textit{max} denotes the maximum element in the feasible set \(\{x^{(j)}_{i} :
+  \bm{x}^{(j)} \in [x_{min}, x_{max}]^{N_{j-1}} \subset
+  \mathbb{R}_{+}^{N_{j-1}} \} \).}
+
+
+  % . The , defined as \(\mathcal{X}^{(j)}\). The existence of the rotation constant \(\alpha^{(j)}\) requires a closed interval of \(\mathcal{X}^{(j)}\) that can be easily achieved in input through normalization or by considering a bounded activation function in the intermediate layers.
+%       This allows us to \textbf{rotate} the \textbf{input feature space}, as
+% \begin{equation*}
+% \label{eq:rotated_input}
+%     x_j' = f(x_j) = 
+%     \begin{cases}
+%         \alpha - x_j & \text{if } w_{ij} <  0\\
+%         x_j     & \text{otherwise},
+%     \end{cases}
+% \end{equation*}
+% {\scriptsize where \(x_j' \in \mathbb{R}_{+}\).} 
 \end{minipage}% This must go next to `\end{minipage}`
 \begin{minipage}{.3\textwidth}
     \begin{flushright}
@@ -139,57 +185,118 @@ Let \(z_i \in \mathbb{R}\) the \textbf{response of the linear part }of the \(i\)
 \end{frame}
 
 
-\begin{frame}{Transformation: Input Rotation}
-\vspace{10pt}
-	Linear neuron can be expressed as:
-  \begin{equation}
-    \label{eq:transformation_3}
-    z'_i = \sum_{\{j |w_{ij} < 0\}}|w_{ij}|(\alpha - x_{j}) + \sum_{\{j |w_{ij} > 0\}}w_{ij}x_j + \tilde{b}_i \in \mathbb{R}.
-  \end{equation} 
+\begin{frame}{Transformation: Weight shifting}
+
+  The initialized non-negative weights will retain their initial variance in those two axes as a projection
+\begin{equation}
+    \label{eq:trans_1}
+    \bm{z}^{(j)} = \bm{W}_{-}^{(j)}(\mathbbm{1}_{N_{j-1}}\alpha^{(j)} - \bm{x}^{(j)}) + \bm{W}^{(j)}_{+}\bm{x}^{(j)} + \bm{b}^{'}{}^{(j)} \in \mathbb{R}_{+}^{N_j} 
+\end{equation}
+{\scriptsize where \(\bm{W}_{+}^{(j)} + \bm{W}_{-}^{(j)} = |\bm{W}^{(j)}|\) with
+\(|\bm{W}^{(j)}| \in \mathbb{R_{+}}^{N_{j} \times N_{j-1}}\) denotes the
+absolute value of the original weight matrix and \(\bm{b}^{'}{}^{(j)}\in
+\mathbb{R}^{N_{j}}_{+}\) the bias vector. }
+
+% \vspace{10pt}
+% 	Linear neuron can be expressed as:
+%   \begin{equation}
+%     \label{eq:transformation_3}
+%     z'_i = \sum_{\{j |w_{ij} < 0\}}|w_{ij}|(\alpha - x_{j}) + \sum_{\{j |w_{ij} > 0\}}w_{ij}x_j + \tilde{b}_i \in \mathbb{R}.
+%   \end{equation} 
 
    \begin{center}
-       \includegraphics[width=0.6\linewidth]{sections/4_nn/imgs/w.png}
+       \includegraphics[width=0.6\linewidth]{sections/4_nn/imgs/wcci_proposal_v3.pdf}
    \end{center}
+
+%  Both \(\bm{W}^{(j)}_{-} = \max(0,
+% -\bm{W}^{(j)})\in \mathbb{R}_{+}^{N_{j} \times N_{j-1}}\) and \(\bm{W}_{+}=
+% \max(0, \bm{W}^{(j)}) \in \mathbb{R}_{+}^{N_{j} \times N_{j-1}}\) are sparse
+% matrices, each containing \(\approx 50 \%\) zero values.
+
+ \end{frame}
+
+ \begin{frame}{Transformation: Bias Integration}
+   % The bias term can be initialized to any non-negative vector
+   % \(\bm{b}^{'}{}^{(j)}\in \mathbb{R}^{N_j}_{+}\), however, this will lead to a
+   % different variance in the output of the activation function, undermining the
+   % applied initialization scheme.
+
+
+   % To overcome this and ensure that the variance
+   % of the activation values is preserved during training, we propose
+   % initializing the biases based on the initialized weights and acquiring the
+   % same variance in the activation distribution. More specifically, we propose
+   % to accumulate
+
+   The applied positive rotation of the weights in the
+   \((\mathbbm{1}_{N_{j-1}}\alpha^{(j)} - \bm{x}^{(j)})\) axis is accumulated in the bias term
+   and integrate it into a shifted activation function. Thus, the bias vector is
+   initialized as  
+   \begin{equation}
+     \label{eq:new_bias}
+     \bm{b}^{'}{}^{(j)} = \tilde{\bm{b}}^{(j)} + \mathbbm{1}_{N_{j}} c^{(j)} \in \mathbb{R}_{+}^{N_{j}},
+   \end{equation}
+   where
+   \begin{equation}
+     \label{eq:b_tilde}
+     \tilde{\bm{b}}^{(j)} = \bm{b}^{(j)} - \sum_{i=0}^{N_j}\sum_{l=0}^{N_l} w^{(j)}_{il-} \in \mathbb{R}_{+}^{N_{j}},
+   \end{equation}
+   and \(c\in\mathbb{R}_{+}\) denotes the \textit{activation shifting point}
+   computed as 
+   \begin{equation}
+     c^{(j)} = \max\{|b^{(j)}_0|, \ldots ,|b^{(j)}_{N_j}\} \in \mathbb{R}_{+} .
+   \end{equation}
+
+   \begin{center}
+     \includegraphics[width=0.9\linewidth]{sections/4_nn/imgs/bias.png}
+   \end{center} \vspace{-10pt}
+   
 \end{frame}
 
 
-\begin{frame}{Transformation: Bias Integration}
-The last term can be \textbf{integrated} into an \textbf{updated bias}: 
-\begin{equation}
-\label{eq:bias_integration}
-\tilde{b}_i = b_i - \alpha\sum_{\{j |w_{ij} < 0\}}|{w}_{ij}| \in \mathbb{R}.
-\end{equation}
+% \begin{frame}{Transformation: Bias Integration}
+% The last term can be \textbf{integrated} into an \textbf{updated bias}: 
+% \begin{equation}
+% \label{eq:bias_integration}
+% \tilde{b}_i = b_i - \alpha\sum_{\{j |w_{ij} < 0\}}|{w}_{ij}| \in \mathbb{R}.
+% \end{equation}
 
-The ne\textbf{w non-negative biases are transformed}:  
-\begin{equation}
-\label{eq:new_bias}
-    b^{'}_i = \tilde{b}_{i} + c \in \mathbb{R}_{+},
-\end{equation}
-with  \(c\in \mathbb{R}_{+}\) denotes \textbf{activation shifting point}
-\begin{equation}
-    c = \text{max}\{|\tilde{b}_0|, \ldots |\tilde{b}_{N}|\} \in \mathbb{R}_{+},
-\end{equation} 
+% The ne\textbf{w non-negative biases are transformed}:  
+% \begin{equation}
+% \label{eq:new_bias}
+%     b^{'}_i = \tilde{b}_{i} + c \in \mathbb{R}_{+},
+% \end{equation}
+% with  \(c\in \mathbb{R}_{+}\) denotes \textbf{activation shifting point}
+% \begin{equation}
+%     c = \text{max}\{|\tilde{b}_0|, \ldots |\tilde{b}_{N}|\} \in \mathbb{R}_{+},
+% \end{equation} 
 
-\begin{center}
-    \includegraphics[width=0.9\linewidth]{sections/4_nn/imgs/bias.png}
-\end{center} \vspace{-10pt}
+% \begin{center}
+%     \includegraphics[width=0.9\linewidth]{sections/4_nn/imgs/bias.png}
+% \end{center} \vspace{-10pt}
 
-\end{frame}
+% \end{frame}
+
+% The \textit{activation shifting point} is applied to the original activation to slide it into the input domain, preserving the variance of the original initialization scheme. To ensure that the network will function in a non-negative manner, the original activation function must operate within a closed interval with a non-negative output space, i.e., \(\phi^{(j)}(\bm{z}^{(j)}): \mathbb{R}^{N_{j}}\rightarrow [\phi^{(j)}_{min}, \phi^{(j)}_{max}]^{N_{j}}\), where \( 0 \leq \phi^{(j)}_{min} < \phi^{(j)}_{max} < \infty\), with the shifted activation calculated as:
+
+
+
+
 
 \begin{frame}{Transformation: Activation Shifting Point}
-
-The \textbf{activation shifting point} is applied \textbf{to the original activation}, \(g(z): \mathbb{R}_{+}\rightarrow [g_{min}, g_{max}]\), where \( 0 \leq g_{min} < g_{max} < \infty\), to slide it into the input
-domain, \textbf{leading to the same output as the original network}. 
+The \textbf{activation shifting point} is applied \textbf{to the original activation},  \(\phi^{(j)}(\bm{z}^{(j)}): \mathbb{R}^{N_{j}}\rightarrow [\phi^{(j)}_{min}, \phi^{(j)}_{max}]^{N_{j}}\), where \( 0 \leq \phi^{(j)}_{min} < \phi^{(j)}_{max} < \infty\), to slide it into the input
+domain, \textbf{leading to the same output as the original network}.
 \begin{equation}
-    g_c(x)  = g(x - c) \in \mathbb{R}_{+}.
+    \bm{y}^{(j)} = \phi^{(j)}_c(\bm{z}^{(j)})  = \phi^{(j)}(\bm{z}^{(j)} - \mathbbm{1}_{N_j} c^{(j)}) \in \mathbb{R}_{+}^{N_{j}}.
     \label{eq:nn_activation}
 \end{equation}
+
 \begin{center}
     \includegraphics[width=0.8\linewidth]{sections/4_nn/imgs/sigmoid.png}
 \end{center} 
 \vspace{-10pt}
-Typically, the \(\alpha^{(k+1)} \in \mathbb{R}_{+}\) of the next layer can be set to \(\alpha^{(k+1)} =
-g_{max} = \text{max}(\mathcal{\bm{X}})\).      
+Typically, the \(\alpha^{(j+1)} \in \mathbb{R}_{+}\) of the next layer can be set to \(\alpha^{(j+1)} =
+\phi^{(j)}_{max} = \text{max}(\mathcal{\bm{X}})\).      
 \end{frame}
 
 % \begin{frame}{Transformation: Non-negative Weights}
@@ -207,22 +314,36 @@ g_{max} = \text{max}(\mathcal{\bm{X}})\).
 % \end{frame}
 
 
-\begin{frame}{Non-negative Neuron}
-For \textbf{every linear neuron}, there is a \textbf{non-negative isomorphic} with the linear response provided as:
-\begin{equation}
-     z_i' = u_i'(\bm{x}')  =\sum_{j=1}^{M}|w_{ij}|x'_j + b'_i \in \mathbb{R}_+,
-\end{equation} and the output as: 
-\begin{equation}
-   y_i' = g_c(u_i'(\bm{x}')) \in \mathbb{R}_+,
-\end{equation} where:
-\begin{equation}
-    x'_j= 
-    \begin{cases}
-        \alpha - x_j & \text{if } w_{ij} <  0\\
-        x_j     & \text{otherwise}
-    \end{cases}.
-\end{equation}
-Then, the appropriate parameters \( b_i' \in \mathbb{R}_+ \) and \( \alpha \in \mathbb{R}_+ \), as well as the activation function \( g_c(\cdot): \mathbb{R} \rightarrow \mathbb{R}_+\) exist so that the neuron leads to the same response, i.e., \(y_i = y'_i\).
+% \begin{frame}{Non-negative Neuron}
+% For \textbf{every linear neuron}, there is a \textbf{non-negative isomorphic} with the linear response provided as:
+% \begin{equation}
+%      z_i' = u_i'(\bm{x}')  =\sum_{j=1}^{M}|w_{ij}|x'_j + b'_i \in \mathbb{R}_+,
+% \end{equation} and the output as: 
+% \begin{equation}
+%    y_i' = g_c(u_i'(\bm{x}')) \in \mathbb{R}_+,
+% \end{equation} where:
+% \begin{equation}
+%     x'_j= 
+%     \begin{cases}
+%         \alpha - x_j & \text{if } w_{ij} <  0\\
+%         x_j     & \text{otherwise}
+%     \end{cases}.
+% \end{equation}
+% Then, the appropriate parameters \( b_i' \in \mathbb{R}_+ \) and \( \alpha \in \mathbb{R}_+ \), as well as the activation function \( g_c(\cdot): \mathbb{R} \rightarrow \mathbb{R}_+\) exist so that the neuron leads to the same response, i.e., \(y_i = y'_i\).
+% \end{frame}
+
+\begin{frame}{Post-initialization Remark}
+	 Consider a linear layer followed by an activation function. defined by
+   Equations~\ref{eq:linear} and~\ref{eq:activation}. Let the weights be
+   initialized so that \(w_{ij} \sim \mathcal{D}(-a, a)\), and let the resulting
+   activation distribution be denoted \(Y \sim \mathcal{A}(\mu, \sigma)\). 
+
+    Given a post-initialization to non-negative weights \(\bm{W}^{'}=
+    |\bm{W}|\), where \(\bm{W}_{+} + \bm{W}_{-} = |\bm{W}|\), there exist a
+    corrective non-negative bias vector corrective \(\bm{b}^{'} \in
+    \mathbb{R}_{+}^{N}\) and a shifted activation function \(\phi_c(\cdot):
+    \mathbb{R}^{N} \rightarrow \mathbb{R}^{N}_{+}\) such that the new activation
+    distribution \( Y^{'}\) satisfies \(Y^{'}\stackrel{d}{=}Y\). 
 \end{frame}
 
 
