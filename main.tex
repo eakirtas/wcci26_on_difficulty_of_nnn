@@ -1,0 +1,126 @@
+
+\documentclass[10pt, compress, aspectratio=169]{beamer}
+\usetheme{metropolis}
+\usepackage{bm}
+\usepackage{booktabs}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta}
+\usepackage{multirow, multicol}
+\usepackage{tabularx}
+\usepackage{makecell}
+\usepackage[scale=2]{ccicons}
+\usepackage{subcaption}
+\usepackage{xcolor}
+\usepackage{colortbl} 
+\usepackage[linesnumbered,lined,boxed,commentsnumbered, ruled,vlined]{algorithm2e}
+\DeclareRobustCommand{\mythead}[1]{%
+  \begin{tabular}{@{}l@{}}#1\end{tabular}%
+}
+\usepackage{tikz}
+\usepackage{amsmath}
+\usetikzlibrary{arrows,shapes}
+
+\usepackage{tabularray}
+\UseTblrLibrary{varwidth}
+
+
+\definecolor{mygreen}{RGB}{0, 102, 0}
+\newcommand\ytl[2]{
+\parbox[b]{3em}{\hfill{\color{cyan}\bfseries\sffamily #1}~$\cdots$~}\makebox[0pt][c]{$\bullet$}\vrule\quad \parbox[c]{8.5cm}{\vspace{7pt}\color{red!40!black!80}\raggedright\sffamily #2.\\[7pt]}\\[-3pt]}
+
+\usepackage{mathtools}
+\DeclarePairedDelimiter{\nint}\lfloor\rceil
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+\DeclarePairedDelimiter{\abs}\lvert\rvert
+
+\newcommand\marklessfootnote[1]{
+    \addtocounter{footnote}{1} %no call is made to \footnotemark.
+    \footnotetext{#1}
+  }
+  
+\newcommand{\highlighti}[2]{%
+    \setlength{\fboxrule}{2pt}%
+    \fcolorbox{#1}{white}{#2}}
+
+
+
+\title{An Isomorphic Transformation for Hardware Implemented Non-negative Neural Networks}
+\author{{\Book\bfseries Manos Kirtas}\inst{1, 2}, Nikolaos Passalis\inst{1}, Nikos Pleros\inst{1}, Anastasios Tefas\inst{1}}
+\date{27 May 2027}
+\institute{\inst{1}Aristotle University of Thessaloniki, Greece \and \inst{2}Centre de Nanosciences et de Nanotechnologies, CNRS, France }
+
+\begin{document}
+\tikzstyle{every picture}+=[remember picture]
+% \everymath{\displaystyle}
+
+{
+\setbeamerfont{title}{size=\LARGE, series=\bfseries}
+\setbeamercolor{title}{fg=white}
+\setbeamercolor{title separator}{fg=white}
+\setbeamercolor{author}{fg=white}
+\setbeamercolor{institute}{fg=white}
+\setbeamercolor{date}{fg=white}
+\setbeamertemplate{author}{
+  \vspace*{0.1em}
+  \insertauthor\par
+  \vspace*{0.1em}
+}
+\usebackgroundtemplate{%
+  \includegraphics[width=\paperwidth,height=\paperheight]{images/iscas26_background_front.pdf}%
+}
+\frame
+{
+    \vspace{55pt}
+    \titlepage
+    \begin{tikzpicture}[remember picture, overlay]
+      \node[anchor=south east, xshift=-6pt, yshift=6pt] at (current page.south east) {
+        \includegraphics[height=1.2cm]{images/SYMPHONY-LOGO.png}
+        \hspace{4pt}
+        \includegraphics[height=1.2cm]{images/LogoAUTHwhite300ppi.png}
+        \hspace{4pt}
+        \includegraphics[height=1.2cm]{images/c2n.png}
+        \hspace{4pt}
+        \includegraphics[height=1.2cm]{images/LOGO_CNRS_BLANC.png}
+        };
+    \end{tikzpicture}
+}
+}
+
+\usebackgroundtemplate{%
+  \includegraphics[width=\paperwidth,height=\paperheight]{images/iscas26_background_general.pdf}%
+}
+
+\include{sections/0_intro/intro}
+% \include{sections/1_adaptinit/adaptinit}
+% \include{sections/2_quant/quant}
+% \include{sections/3_mixedquant/mixedquant}
+\include{sections/4_nn/nn}
+% \include{sections/5_mult/mult}
+% \include{sections/6_conclusions/conclusion}
+
+\begin{frame}{}
+  \begin{center}
+        \vspace{2cm}\\
+        \textbf{Thank you!}
+        \vspace{3cm}\\
+
+
+        \begin{columns}
+          \begin{column}{0.2\textwidth}
+            \includegraphics[width=1.2\linewidth]{./images/SYMPHONY-LOGO.png}
+          \end{column}
+          \begin{column}{0.39\textwidth}
+            \scriptsize{This work is partially funded by SYMPHONY. The SYMPHONY project has
+            received funding from Horizon Europe, the European Union’s Framework
+            Programme for Research and Innovation,under grant agreement
+            101135523.}
+          \end{column}
+          \begin{column}{0.15\textwidth}
+            \includegraphics[width=\linewidth]{./images/european-union-logo-png_seeklogo-50235.png}
+          \end{column}
+        \end{columns}
+    \end{center}
+\end{frame}
+
+
+\end{document}
